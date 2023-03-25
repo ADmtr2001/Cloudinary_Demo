@@ -1,0 +1,56 @@
+.file-upload-container {
+  .upload-area-container {
+    display: block;
+    margin: 50px auto 0;
+    height: 200px;
+    width: 400px;
+    border: 2px solid #69f0ae;
+    border-radius: 10px;
+    position: relative;
+
+    input {
+      visibility: hidden;
+    }
+
+    label {
+      width: 100%;
+      position: absolute;
+      height: 100%;
+      left: 0;
+      top: 0;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      h2 {
+        font-size: 20px;
+      }
+    }
+  }
+
+  .file-upload-actions-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-top: 20px;
+
+    .delete-btn {
+      font-size: 40px;
+      height: 40px;
+      width: 40px;
+      cursor: pointer;
+
+      &:hover ::ng-deep {
+        color: #ff7f7f;
+      }
+    }
+
+    app-progress-bar {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+}

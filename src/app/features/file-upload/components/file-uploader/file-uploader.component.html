@@ -1,0 +1,17 @@
+<div class="file-upload-container">
+  <div appImageUpload class="upload-area-container" (fileDropped)="onFileDrop($event)">
+    <input type="file" id='input' (change)="onFileSelect($event)">
+    <label for='input'>
+      <h2>Choose File</h2>
+      <p *ngIf="fileControl.value">Chosen file: {{ fileControl.value.name }}</p>
+    </label>
+  </div>
+
+  <div class="file-upload-actions-container" *ngIf="fileControl.value">
+    <app-progress-bar [progress]="progress" (onLoadingCancel)="cancelLoading()"></app-progress-bar>
+    <button class="upload-btn" mat-raised-button color="accent" (click)="uploadFile()">
+      Upload
+    </button>
+    <mat-icon class="delete-btn" (click)="clearForm()">delete</mat-icon>
+  </div>
+</div>

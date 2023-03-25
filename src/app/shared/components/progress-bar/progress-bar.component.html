@@ -1,0 +1,6 @@
+<div class="progress-bar-container">
+  <div class="progress-bar" [style.width.%]="progress">
+    <div class="progress-bar-text">{{progress}}%</div>
+    <mat-icon class="cancel-button" (click)="onCancel()" *ngIf="progress > 0">close</mat-icon>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+<div class="gallery-container">
+  <div class="selected-file-action-bar-container" *ngIf="selectedFile">
+    <div class="action-buttons">
+      <button mat-raised-button color="accent" (click)="selectFile(selectedFile)">
+        Select
+      </button>
+      <button mat-raised-button color="accent" (click)="deleteFile(selectedFile)">
+        Delete
+      </button>
+    </div>
+  </div>
+
+  <mat-chip-list #chipList>
+    <mat-chip
+      *ngFor="let fileType of ['image', 'video']"
+      [class.selected]="checkIfFileTypeChipIsSelected(fileType)"
+      (click)="toggleFileTypeChip(fileType)">
+      {{ fileType }}
+    </mat-chip>
+  </mat-chip-list>
+
+  <mat-chip-list #chipList *ngIf="folders.length">
+    <mat-chip
+      *ngFor="let folder of folders"
+      [class.selected]="checkIfFolderChipIsSelected(folder.name)"
+      (click)="toggleFolderChip(folder.name)"
+    >
+      {{ folder.name }}
+    </mat-chip>
+  </mat-chip-list>
+
+  <div class="gallery-images-container" *ngIf="images.length">
+      <div
+        class="gallery-item"
+        *ngFor="let image of images"
+        [class.selected]="isSelected(image)"
+        (click)="onFileSelect(image)"
+      >
+        <img *ngIf="image.resource_type === 'image'" [src]="image.secure_url" alt="Gallery item" />
+
+        <video *ngIf="image.resource_type === 'video'" controls>
+          <source [src]="image.secure_url" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+  </div>
+
+  <button
+    class="load-more-btn"
+    mat-raised-button color="accent"
+    (click)="loadMore()"
+  >Load More</button>
+</div>
