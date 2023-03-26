@@ -12,12 +12,12 @@ import { FileUploadService } from '../../services/file-upload.service';
   styleUrls: ['./gallery-dialog.component.scss'],
 })
 export class GalleryDialogComponent implements OnInit {
-  public images: Resource[] = [];
+  public resources: Resource[] = [];
   public folders: Folder[] = [];
 
   private selectedFileTypeChips: string[] = ['image'];
   private selectedFolderChips: string[] = [];
-  public selectedFile: Resource | null = null;
+  public selectedResource: Resource | null = null;
 
   constructor(
     private readonly fileUploadService: FileUploadService,
@@ -28,19 +28,9 @@ export class GalleryDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.initDialogPanelClass();
-
     this.fileUploadService.resetNextCursor();
-    this.loadImages();
-    this.loadFolders();
-  }
-
-  public loadMore(): void {
-    this.fileUploadService
-      .getAllImages(this.selectedFolderChips, this.selectedFileTypeChips)
-      .pipe(take(1))
-      .subscribe((resources) => {
-        this.images.push(...resources);
-      });
+    this.loadAllResources();
+    this.loadAllFolders();
   }
 
   public toggleFolderChip(chip: string): void {
@@ -53,7 +43,7 @@ export class GalleryDialogComponent implements OnInit {
     this.cdr.detectChanges();
 
     this.fileUploadService.resetNextCursor();
-    this.loadImages();
+    this.loadAllResources();
   }
 
   public toggleFileTypeChip(chip: string): void {
@@ -68,7 +58,7 @@ export class GalleryDialogComponent implements OnInit {
     this.cdr.detectChanges();
 
     this.fileUploadService.resetNextCursor();
-    this.loadImages();
+    this.loadAllResources();
   }
 
   public checkIfFolderChipIsSelected(chip: string): boolean {
@@ -79,27 +69,27 @@ export class GalleryDialogComponent implements OnInit {
     return this.selectedFileTypeChips.includes(chip);
   }
 
-  public onFileSelect(file: Resource): void {
+  public onResourceSelect(file: Resource): void {
     if (!this.data?.isEditable) {
-      this.matDialogRef.close({ selectedFile: file });
+      this.matDialogRef.close({ selectedFilResource: file });
     }
 
-    if (this.selectedFile === file) {
-      this.selectedFile = null;
+    if (this.selectedResource === file) {
+      this.selectedResource = null;
     } else {
-      this.selectedFile = file;
+      this.selectedResource = file;
     }
   }
 
-  public selectFile(file: Resource): void {
-    this.matDialogRef.close({ selectedFile: file });
+  public selectResource(file: Resource): void {
+    this.matDialogRef.close({ selectedResource: file });
   }
 
-  public isSelected(file: Resource): boolean {
-    return this.selectedFile === file;
+  public isResourceSelected(file: Resource): boolean {
+    return this.selectedResource === file;
   }
 
-  public deleteFile(file: Resource): void {
+  public deleteResource(file: Resource): void {
     if (file.resource_type === 'image') {
       this.fileUploadService.deleteImage(file.public_id).subscribe();
     } else if (file.resource_type === 'video') {
@@ -107,16 +97,25 @@ export class GalleryDialogComponent implements OnInit {
     }
   }
 
-  private loadImages(): void {
+  public loadMoreResources(): void {
     this.fileUploadService
       .getAllImages(this.selectedFolderChips, this.selectedFileTypeChips)
       .pipe(take(1))
       .subscribe((resources) => {
-        this.images = resources;
+        this.resources.push(...resources);
       });
   }
 
-  private loadFolders(): void {
+  private loadAllResources(): void {
+    this.fileUploadService
+      .getAllImages(this.selectedFolderChips, this.selectedFileTypeChips)
+      .pipe(take(1))
+      .subscribe((resources) => {
+        this.resources = resources;
+      });
+  }
+
+  private loadAllFolders(): void {
     this.fileUploadService
       .getAllFolders()
       .pipe(take(1))

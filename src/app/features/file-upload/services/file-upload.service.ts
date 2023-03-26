@@ -6,6 +6,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { Folder } from '../interfaces/folder.interface';
 import { GetImagesFullResponse } from '../interfaces/get-images-full-response.interface';
 import { Resource } from '../interfaces/resource.interface';
@@ -40,7 +41,7 @@ export class FileUploadService {
     const options = { params: params };
 
     return this.http
-      .get<GetImagesFullResponse>('http://localhost:3000/media', options)
+      .get<GetImagesFullResponse>(`${environment.apiUrl}/media`, options)
       .pipe(
         tap((data: GetImagesFullResponse) => {
           this.returnedNextCursor = data.next_cursor;
@@ -52,7 +53,7 @@ export class FileUploadService {
   }
 
   public getAllFolders(): Observable<Folder[]> {
-    return this.http.get<Folder[]>('http://localhost:3000/media/folders');
+    return this.http.get<Folder[]>(`${environment.apiUrl}/media/folders`);
   }
 
   public uploadImage(file: File): Observable<HttpEvent<unknown>> {
@@ -70,7 +71,7 @@ export class FileUploadService {
 
     const req = new HttpRequest(
       'POST',
-      'http://localhost:3000/media/image',
+      `${environment.apiUrl}/media/image`,
       formData,
       options
     );
@@ -90,7 +91,7 @@ export class FileUploadService {
 
     const req = new HttpRequest(
       'POST',
-      'http://localhost:3000/media/video',
+      `${environment.apiUrl}/media/video`,
       formData,
       options
     );
@@ -98,7 +99,7 @@ export class FileUploadService {
   }
 
   public deleteImage(publicId: string): Observable<Object> {
-    return this.http.delete(`http://localhost:3000/media/image`, {
+    return this.http.delete(`${environment.apiUrl}/media/image`, {
       params: {
         publicId,
       },
@@ -106,7 +107,7 @@ export class FileUploadService {
   }
 
   public deleteVideo(publicId: string): Observable<Object> {
-    return this.http.delete(`http://localhost:3000/media/video`, {
+    return this.http.delete(`${environment.apiUrl}/media/video`, {
       params: {
         publicId,
       },

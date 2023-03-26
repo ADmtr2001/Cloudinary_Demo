@@ -1,10 +1,10 @@
 <div class="gallery-container">
-  <div class="selected-file-action-bar-container" *ngIf="selectedFile">
+  <div class="selected-file-action-bar-container" *ngIf="selectedResource">
     <div class="action-buttons">
-      <button mat-raised-button color="accent" (click)="selectFile(selectedFile)">
+      <button mat-raised-button color="accent" (click)="selectResource(selectedResource)">
         Select
       </button>
-      <button mat-raised-button color="accent" (click)="deleteFile(selectedFile)">
+      <button mat-raised-button color="accent" (click)="deleteResource(selectedResource)">
         Delete
       </button>
     </div>
@@ -29,12 +29,12 @@
     </mat-chip>
   </mat-chip-list>
 
-  <div class="gallery-images-container" *ngIf="images.length">
+  <div class="gallery-images-container" *ngIf="resources.length">
       <div
         class="gallery-item"
-        *ngFor="let image of images"
-        [class.selected]="isSelected(image)"
-        (click)="onFileSelect(image)"
+        *ngFor="let image of resources"
+        [class.selected]="isResourceSelected(image)"
+        (click)="onResourceSelect(image)"
       >
         <img *ngIf="image.resource_type === 'image'" [src]="image.secure_url" alt="Gallery item" />
 
@@ -48,6 +48,6 @@
   <button
     class="load-more-btn"
     mat-raised-button color="accent"
-    (click)="loadMore()"
+    (click)="loadMoreResources()"
   >Load More</button>
 </div>

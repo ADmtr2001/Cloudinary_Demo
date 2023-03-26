@@ -1,4 +1,4 @@
-import { HttpEventType } from '@angular/common/http';
+import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -51,33 +51,31 @@ export class FileUploaderComponent implements OnInit {
     if (file.type.startsWith('image/')) {
       this.uploadSubscription = this.fileUploadService
         .uploadImage(file)
-        .subscribe((event) => {
-          if (event.type === HttpEventType.UploadProgress) {
-            this.progress = Math.round((event.loaded / event.total!) * 100);
-          } else if (event.type === HttpEventType.Response) {
-            this.uploadSubscription?.unsubscribe();
-            this.uploadSubscription = null;
-            this.clearForm();
-          }
-        });
+        .subscribe((event: HttpEvent<unknown>) =>
+          this.handleLoadingProgress(event)
+        );
     } else if (file.type.startsWith('video/')) {
       this.uploadSubscription = this.fileUploadService
         .uploadVideo(file)
-        .subscribe((event) => {
-          if (event.type === HttpEventType.UploadProgress) {
-            this.progress = Math.round((event.loaded / event.total!) * 100);
-          } else if (event.type === HttpEventType.Response) {
-            this.uploadSubscription?.unsubscribe();
-            this.uploadSubscription = null;
-            this.clearForm();
-          }
-        });
+        .subscribe((event: HttpEvent<unknown>) =>
+          this.handleLoadingProgress(event)
+        );
     }
   }
 
   public cancelLoading(): void {
     if (this.uploadSubscription) {
       this.uploadSubscription.unsubscribe();
+      this.uploadSubscription = null;
+      this.clearForm();
+    }
+  }
+
+  private handleLoadingProgress(event: HttpEvent<unknown>): void {
+    if (event.type === HttpEventType.UploadProgress) {
+      this.progress = Math.round((event.loaded / event.total!) * 100);
+    } else if (event.type === HttpEventType.Response) {
+      this.uploadSubscription?.unsubscribe();
       this.uploadSubscription = null;
       this.clearForm();
     }

@@ -6,14 +6,14 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./gallery-buttons.component.scss'],
 })
 export class GalleryButtonsComponent {
-  @Output() selectFile: EventEmitter<void> = new EventEmitter<void>();
-  @Output() editFiles: EventEmitter<void> = new EventEmitter<void>();
+  @Output() public selectFile: EventEmitter<void> = new EventEmitter<void>();
+  @Output() public editFiles: EventEmitter<void> = new EventEmitter<void>();
 
-  onFileSelectClick() {
+  public onFileSelectClick(): void {
     this.selectFile.emit();
   }
 
-  onFilesEditClick() {
+  public onFilesEditClick(): void {
     this.editFiles.emit();
   }
 }
